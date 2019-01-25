@@ -18,7 +18,7 @@ const SlackStrategy = require('passport-slack').Strategy;
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
 mongoose
-  .connect(process.env.MONGODB, {useNewUrlParser: true})
+  .connect("mongodb://lefinancier:simbar5424@ds035485.mlab.com:35485/passport-social", {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
