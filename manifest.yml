@@ -1,6 +1,6 @@
 ---
   aplications:
-  -instances: 1
+    -instances: 1
     name: socialloginporfirio24ene
     memory: 128M
     domain: mybluemix.net
