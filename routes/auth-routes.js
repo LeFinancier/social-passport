@@ -78,16 +78,16 @@ authRoutes.get("/auth/google/callback", passport.authenticate("google", {
   successRedirect: "/private-page"
 }));
 
-// authRoutes.get("/login", (req, res, next) => {
-//   res.render("auth/login", {"message": req.flash("error")});
-// });
+authRoutes.get("/login", (req, res, next) => {
+  res.render("auth/login", {"message": req.flash("error")});
+});
 
-// authRoutes.post("/login", passport.authenticate("local", {
-//   successRedirect: "/private-page",
-//   failureRedirect: "/login",
-//   failureFlash: true,
-//   passReqToCallback: true
-// }));
+authRoutes.post("/login", passport.authenticate("local", {
+  successRedirect: "/private-page",
+  failureRedirect: "/login",
+  failureFlash: true,
+  passReqToCallback: true
+}));
 
 authRoutes.get("/private-page", ensureLogin.ensureLoggedIn(), (req, res) => {
   res.render("private", { user: req.user });
