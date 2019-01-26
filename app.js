@@ -74,8 +74,8 @@ passport.use(new LocalStrategy({
 }));
 
 passport.use(new GoogleStrategy({
-  clientID: "412369621894-t26pj0fb0ucb0rvl4acck1rar4s0v414.apps.googleusercontent.com",
-  clientSecret: "_NEgJTe53uA0HZyhB8LcLAWb",
+  clientID: "942889751565-m96p1702009t88dgubqn2rrt564cjo73.apps.googleusercontent.com",
+  clientSecret: "8TDpRe2-oZ6zUmuWI-Tn2rcD",
   callbackURL: "/auth/google/callback"
 }, (accessToken, refreshToken, profile, done) => {
   User.findOne({ googleID: profile.id })
