@@ -16,9 +16,10 @@ const User = require('./models/user')
 const flash = require("connect-flash");
 const SlackStrategy = require('passport-slack').Strategy;
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+const MongoStore = require("connect-mongo")(session);
 
 mongoose
-  .connect("mongodb://lefinancier:simbar5424@ds035485.mlab.com:35485/passport-social", {useNewUrlParser: true})
+  .connect(process.env.MONGODB, {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -39,7 +40,8 @@ app.use(cookieParser());
 app.use(session({
   secret: "our-passport-local-strategy-app",
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: new MongoStore({mongooseConnection: mongoose.connection})
 }));
 
 passport.serializeUser((user, cb) => {
@@ -53,23 +55,23 @@ passport.deserializeUser((id, cb) => {
   });
 });
 
-// passport.use(new LocalStrategy({
-//   passReqToCallback: true
-// },(req, username, password, next) => {
-//   User.findOne({ username }, (err, user) => {
-//     if (err) {
-//       return next(err);
-//     }
-//     if (!user) {
-//       return next(null, false, { message: "Usuario incorrecto" });
-//     }
-//     if (!bcrypt.compareSync(password, user.password)) {
-//       return next(null, false, { message: "Contraseña incorrecta" });
-//     }
+passport.use(new LocalStrategy({
+  passReqToCallback: true
+},(req, username, password, next) => {
+  User.findOne({ username }, (err, user) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return next(null, false, { message: "Usuario incorrecto" });
+    }
+    if (!bcrypt.compareSync(password, user.password)) {
+      return next(null, false, { message: "Contraseña incorrecta" });
+    }
 
-//     return next(null, user);
-//   });
-// }));
+    return next(null, user);
+  });
+}));
 
 passport.use(new GoogleStrategy({
   clientID: "412369621894-t26pj0fb0ucb0rvl4acck1rar4s0v414.apps.googleusercontent.com",
